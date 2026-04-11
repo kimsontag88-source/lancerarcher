@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FATE // LOST_LOG 공략 가이드</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#060810;color:#dddde4;font-family:'Courier New',monospace;line-height:1.8;padding:20px;max-width:720px;margin:0 auto}
+  h1{color:#5bcefa;font-size:24px;text-align:center;margin:30px 0 8px;letter-spacing:3px}
+  h2{color:#5bcefa;font-size:17px;margin:28px 0 12px;border-bottom:1px solid #1a2a3e;padding-bottom:6px}
+  h3{color:#ff6b6b;font-size:14px;margin:18px 0 8px}
+  p,li{font-size:14px;color:#bbc;margin-bottom:6px}
+  ul{padding-left:20px}
+  .panel{border:1px solid #1a2a3e;border-radius:6px;padding:14px;margin:10px 0;background:#0a0e18}
+  .tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:12px;margin:2px}
+  .cu{color:#5bcefa;font-weight:bold} .em{color:#ff6b6b;font-weight:bold}
+  .gold{color:#f1c40f} .warn{color:#e67e22}
+  .end-box{border:1px solid #334;border-radius:4px;padding:10px;margin:6px 0;background:#0e1420}
+  .end-title{font-weight:bold;font-size:13px}
+  .spoiler{color:#0a0e18;background:#0a0e18;border-radius:3px;padding:0 4px;cursor:pointer;transition:all .3s}
+  .spoiler:hover,.spoiler:active{color:#ddd;background:#1a2a3e}
+  .note{font-size:12px;color:#556;font-style:italic;margin-top:4px}
+  a{color:#5bcefa}
+  .disc{text-align:center;font-size:11px;color:#445;margin:40px 0 20px}
+</style>
+</head>
+<body>
+
+<h1>FATE // LOST_LOG</h1>
+<p style="text-align:center;color:#8899aa;font-size:13px;margin-bottom:4px">파멸의 가시 x 무한의 검제</p>
+<p style="text-align:center;color:#556;font-size:12px;margin-bottom:24px">성배의 잔해 -- 협동 로그라이크 | 공략 가이드</p>
+
+<h2>게임 소개</h2>
+<p><span class="cu">쿠 훌린(랜서)</span>과 <span class="em">에미야(아처)</span> 두 서번트가 오염된 지하 공간을 탐색하며, 최하층 B10F의 오염핵을 격파하는 협동 로그라이크 텍스트 어드벤처입니다.</p>
+<p>선택에 따라 <span class="gold">유대(Bond)</span>와 <span class="gold">시너지(Synergy)</span>가 변화하며, 이 수치가 엔딩을 결정합니다.</p>
+
+<h2>기본 조작</h2>
+<div class="panel">
+<ul>
+  <li><span class="gold">언어 전환</span> -- 좌상단 국기 버튼으로 일본어/한국어 전환</li>
+  <li><span class="gold">사운드</span> -- 우상단 스피커 버튼으로 효과음 ON/OFF</li>
+  <li><span class="gold">저장</span> -- 탐색 중 우상단 저장 버튼 (전투 중 저장 불가)</li>
+  <li><span class="gold">이어하기</span> -- 타이틀 화면에서 CONTINUE 버튼 (세이브 있을 때만 표시)</li>
+</ul>
+</div>
+
+<h2>게임 흐름</h2>
+<div class="panel">
+  <p><span class="gold">1. 타이틀</span> -- 난이도 선택 (EASY / NORMAL / HARD) 후 NEW GAME</p>
+  <p><span class="gold">2. 터미널</span> -- 입력창에 <code style="color:#5bcefa">trace on</code> 입력 -> 탐색 시작 버튼 활성화</p>
+  <p><span class="gold">3. 탐색</span> -- 동서남북 방향을 선택해 방 탐색. 5개 이상 탐색 시 다음 층 하강 가능</p>
+  <p><span class="gold">4. 전투</span> -- 랜서 턴 -> 아처 턴 -> 적 턴 순서의 턴제 전투</p>
+  <p><span class="gold">5. B10F 보스전</span> -- 최하층 도달 시 유대에 따라 보스가 결정되고 최종전 돌입</p>
+  <p><span class="gold">6. 엔딩</span> -- 보스전 결과 + 유대/시너지 수치에 따라 엔딩 분기</p>
+</div>
+
+<h2>탐색 시 방 종류</h2>
+<div class="panel">
+<ul>
+  <li><span class="gold">텅 빈 복도</span> -- 아무 일도 없음</li>
+  <li><span class="warn">적 조우!</span> -- 전투 돌입</li>
+  <li><span class="gold">보급품 발견</span> -- 아이템 획득 (룬석, 영기 파편, 회복약 등)</li>
+  <li><span class="warn">함정!</span> -- 랜서 또는 아처에게 데미지</li>
+  <li><span class="gold">이벤트</span> -- 유대/자원 보너스가 있는 스토리 이벤트</li>
+  <li><span class="gold">안전 구역</span> -- HP와 자원(룬/투영력) 회복</li>
+</ul>
+</div>
+
+<h2>전투 시스템</h2>
+
+<h3>쿠 훌린 (랜서) 스킬</h3>
+<div class="panel">
+<ul>
+  <li><span class="cu">찌르기</span> -- 기본 공격. 자원 소모 없음</li>
+  <li><span class="cu">룬 (15)</span> -- 룬 15 소모. 약 1.8배 데미지</li>
+  <li><span class="cu">볼크 (35)</span> -- 룬 35 소모. 약 3.5배 데미지. 게이 볼크</li>
+</ul>
+</div>
+
+<h3>에미야 (아처) 스킬</h3>
+<div class="panel">
+<ul>
+  <li><span class="em">간장막야</span> -- 기본 공격. 자원 소모 없음</li>
+  <li><span class="em">투영 (15)</span> -- 투영력 15 소모. 약 2배 데미지</li>
+  <li><span class="em">UBW (30)</span> -- 투영력 30 소모. 약 3배 데미지. 무한의 검제</li>
+  <li><span class="cu">아이아스</span> -- 방어. 다음 적 공격 데미지 60% 경감</li>
+</ul>
+</div>
+
+<h3>합동 공격 (Combo)</h3>
+<div class="panel">
+<p>아처 턴 종료 후 확률적으로 발동. 발동 조건:</p>
+<ul>
+  <li>시너지 15 이상</li>
+  <li>유대 8 이상</li>
+  <li>확률 = 유대 x 1.5% (최대 50%)</li>
+</ul>
+<p class="note">유대가 높을수록 합동 공격이 자주 발동합니다.</p>
+</div>
+
+<h3>구출 시스템</h3>
+<div class="panel">
+<p><span class="gold">유대 10 이상</span>일 때, 한쪽이 HP 0이 되면 상대가 구출하여 HP 20으로 회복시킵니다.</p>
+<p class="note">1회성이 아니므로 유대만 충분하면 반복 발동합니다.</p>
+</div>
+
+<h2>난이도별 차이</h2>
+<div class="panel">
+<ul>
+  <li><span class="gold">EASY</span> -- 적 HP x0.7 / 적 공격 x0.7 / 유대 획득 x1.3</li>
+  <li><span class="gold">NORMAL</span> -- 기본값</li>
+  <li><span class="warn">HARD</span> -- 적 HP x1.4 / 적 공격 x1.25 / 유대 획득 x0.8</li>
+</ul>
+<p class="note">HARD에서는 유대 축적이 느려 히든 엔딩 달성이 어렵습니다.</p>
+</div>
+
+<h2>엔딩 목록 (7종)</h2>
+
+<div class="end-box">
+  <div class="end-title" style="color:#888">패배 엔딩 -- 데이터 소실</div>
+  <p>조건: HP가 0이 된 서번트 발생 (구출 불가 시)</p>
+</div>
+
+<div class="end-box">
+  <div class="end-title" style="color:#888">고독 엔딩 -- 각자의 길</div>
+  <p>조건: 유대 < 7</p>
+</div>
+
+<div class="end-box">
+  <div class="end-title" style="color:#f1c40f">묵인 엔딩 -- 전사의 예의</div>
+  <p>조건: 유대 7~14</p>
+</div>
+
+<div class="end-box">
+  <div class="end-title" style="color:#5bcefa">공투 엔딩 -- 푸른 창과 붉은 외투</div>
+  <p>조건: 유대 15 이상 (보스 미격파)</p>
+</div>
+
+<div class="end-box">
+  <div class="end-title" style="color:#ffd700">진 엔딩 -- 기록되지 않은 전쟁</div>
+  <p>조건: 보스 격파 (유대 < 20)</p>
+</div>
+
+<div class="end-box">
+  <div class="end-title" style="color:#ff44cc">극한 공투 엔딩 -- 동시 보구 해방</div>
+  <p>조건: 보스 격파 + 유대 20 이상</p>
+</div>
+
+<div class="end-box">
+  <div class="end-title" style="color:#ff44ff">진*유대 엔딩 -- 영원히 이어지는 혼 (히든)</div>
+  <p>조건: <span class="spoiler">보스 격파 + 유대 25 이상 + 시너지 40 이상</span></p>
+  <p class="note">* 조건 부분을 터치/호버하면 보입니다</p>
+</div>
+
+<h2>엔딩 수집 팁</h2>
+<div class="panel">
+<ul>
+  <li><span class="gold">유대를 올리려면</span> -- 층 도착 시 나오는 대화 이벤트에서 호감 높은 선택지(보통 첫 번째)를 고르세요. 유대 +3~5 선택지가 있습니다.</li>
+  <li><span class="gold">시너지를 올리려면</span> -- 보급품 중 "시너지 결정"을 우선 획득하세요.</li>
+  <li><span class="gold">이벤트 방</span>에서도 유대가 올라갑니다. 특히 <span class="gold">유대 5 이상</span>에서 확률적으로 등장하는 <span class="warn">에미야 요리 이벤트</span>는 유대 +3 & HP 회복.</li>
+  <li><span class="gold">히든 엔딩</span>은 유대 25 + 시너지 40이 필요하므로 EASY 난이도 추천. 모든 대화에서 최대 호감 선택 + 시너지 결정 수집이 필수입니다.</li>
+  <li><span class="warn">보스 난이도</span>는 유대에 따라 변합니다: 유대 < 8이면 약한 보스, 8~19면 중간, 20 이상이면 최강 보스. 히든 엔딩 노릴 때는 충분한 전투 준비가 필요합니다.</li>
+</ul>
+</div>
+
+<h2>보스 정보</h2>
+<div class="panel">
+<ul>
+  <li><span class="gold">유대 < 8</span> -- 마신주 포르네우스 (HP 180 / ATK 22)</li>
+  <li><span class="gold">유대 8~19</span> -- 그림자 헤라클레스 (HP 250 / ATK 26)</li>
+  <li><span class="warn">유대 20+</span> -- 성배의 오염체 앙그라 마이뉴 (HP 320 / ATK 30)</li>
+</ul>
+<p class="note">난이도 배율이 추가 적용됩니다. HARD + 유대 20 이상 보스는 HP 448.</p>
+</div>
+
+<h2>다회차 유산 (Meta Bonus)</h2>
+<div class="panel">
+<p>특정 엔딩 클리어 시 다음 회차에 보너스가 표시됩니다:</p>
+<ul>
+  <li><span style="color:#ff44ff">진*유대 엔딩</span> -- 시너지 +10, 유대 +5</li>
+  <li><span style="color:#ff44cc">극한 공투 엔딩</span> -- 시너지 +5</li>
+  <li><span style="color:#ffd700">진 엔딩</span> -- 유대 +3</li>
+</ul>
+<p class="note">클리어 시 세이브 데이터가 삭제됩니다 (패배 엔딩은 세이브 유지).</p>
+</div>
+
+<div class="disc">
+  * 팬게임입니다. Fate 시리즈의 모든 권리는 TYPE-MOON에 귀속됩니다.<br>
+  Guide by Behelit
+</div>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FATE // LOST_LOG 攻略ガイド</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#060810;color:#dddde4;font-family:'Courier New',monospace;line-height:1.8;padding:20px;max-width:720px;margin:0 auto}
+  h1{color:#5bcefa;font-size:24px;text-align:center;margin:30px 0 8px;letter-spacing:3px}
+  h2{color:#5bcefa;font-size:17px;margin:28px 0 12px;border-bottom:1px solid #1a2a3e;padding-bottom:6px}
+  h3{color:#ff6b6b;font-size:14px;margin:18px 0 8px}
+  p,li{font-size:14px;color:#bbc;margin-bottom:6px}
+  ul{padding-left:20px}
+  .panel{border:1px solid #1a2a3e;border-radius:6px;padding:14px;margin:10px 0;background:#0a0e18}
+  .cu{color:#5bcefa;font-weight:bold} .em{color:#ff6b6b;font-weight:bold}
+  .gold{color:#f1c40f} .warn{color:#e67e22}
+  .end-box{border:1px solid #334;border-radius:4px;padding:10px;margin:6px 0;background:#0e1420}
+  .end-title{font-weight:bold;font-size:13px}
+  .spoiler{color:#0a0e18;background:#0a0e18;border-radius:3px;padding:0 4px;cursor:pointer;transition:all .3s}
+  .spoiler:hover,.spoiler:active{color:#ddd;background:#1a2a3e}
+  .note{font-size:12px;color:#556;font-style:italic;margin-top:4px}
+  a{color:#5bcefa}
+  .disc{text-align:center;font-size:11px;color:#445;margin:40px 0 20px}
+</style>
+</head>
+<body>
+
+<h1>FATE // LOST_LOG</h1>
+<p style="text-align:center;color:#8899aa;font-size:13px;margin-bottom:4px">破滅の棘 x 無限の剣製</p>
+<p style="text-align:center;color:#556;font-size:12px;margin-bottom:24px">聖杯の残骸 -- 協力ローグライク | 攻略ガイド</p>
+
+<h2>ゲーム紹介</h2>
+<p><span class="cu">クー・フーリン（ランサー）</span>と<span class="em">エミヤ（アーチャー）</span>の二騎が汚染された地下空間を探索し、最下層B10Fの汚染核を撃破する協力ローグライク・テキストアドベンチャーです。</p>
+<p>選択によって<span class="gold">絆（Bond）</span>と<span class="gold">シナジー（Synergy）</span>が変化し、これらの数値がエンディングを決定します。</p>
+
+<h2>基本操作</h2>
+<div class="panel">
+<ul>
+  <li><span class="gold">言語切替</span> -- 左上の国旗ボタンで日本語/韓国語切替</li>
+  <li><span class="gold">サウンド</span> -- 右上のスピーカーボタンでSE ON/OFF</li>
+  <li><span class="gold">セーブ</span> -- 探索中に右上の保存ボタン（戦闘中はセーブ不可）</li>
+  <li><span class="gold">コンティニュー</span> -- タイトル画面のCONTINUEボタン（セーブデータがある場合のみ表示）</li>
+</ul>
+</div>
+
+<h2>ゲームの流れ</h2>
+<div class="panel">
+  <p><span class="gold">1. タイトル</span> -- 難易度選択（EASY / NORMAL / HARD）後、NEW GAME</p>
+  <p><span class="gold">2. ターミナル</span> -- 入力欄に <code style="color:#5bcefa">trace on</code> と入力 → 探索開始ボタンが出現</p>
+  <p><span class="gold">3. 探索</span> -- 東西南北の方向を選んで部屋を探索。5部屋以上探索で次の階への下降が可能</p>
+  <p><span class="gold">4. 戦闘</span> -- ランサーターン → アーチャーターン → 敵ターンの順番制バトル</p>
+  <p><span class="gold">5. B10F ボス戦</span> -- 最下層到達時、絆に応じてボスが決定し最終戦へ</p>
+  <p><span class="gold">6. エンディング</span> -- ボス戦結果 + 絆/シナジーの数値でエンディング分岐</p>
+</div>
+
+<h2>探索時の部屋タイプ</h2>
+<div class="panel">
+<ul>
+  <li><span class="gold">空の通路</span> -- 何も起きない</li>
+  <li><span class="warn">敵遭遇！</span> -- 戦闘突入</li>
+  <li><span class="gold">補給品発見</span> -- アイテム取得（ルーン石、霊基の欠片、回復薬など）</li>
+  <li><span class="warn">罠！</span> -- ランサーまたはアーチャーにダメージ</li>
+  <li><span class="gold">イベント</span> -- 絆/リソースボーナス付きのストーリーイベント</li>
+  <li><span class="gold">安全区域</span> -- HPとリソース（ルーン/投影力）回復</li>
+</ul>
+</div>
+
+<h2>戦闘システム</h2>
+
+<h3>クー・フーリン（ランサー）スキル</h3>
+<div class="panel">
+<ul>
+  <li><span class="cu">突き</span> -- 基本攻撃。リソース消費なし</li>
+  <li><span class="cu">ルーン（15）</span> -- ルーン15消費。約1.8倍ダメージ</li>
+  <li><span class="cu">ボルク（35）</span> -- ルーン35消費。約3.5倍ダメージ。ゲイ・ボルク</li>
+</ul>
+</div>
+
+<h3>エミヤ（アーチャー）スキル</h3>
+<div class="panel">
+<ul>
+  <li><span class="em">干将莫耶</span> -- 基本攻撃。リソース消費なし</li>
+  <li><span class="em">投影（15）</span> -- 投影力15消費。約2倍ダメージ</li>
+  <li><span class="em">UBW（30）</span> -- 投影力30消費。約3倍ダメージ。無限の剣製</li>
+  <li><span class="cu">アイアス</span> -- 防御。次の敵攻撃ダメージ60%軽減</li>
+</ul>
+</div>
+
+<h3>合同攻撃（Combo）</h3>
+<div class="panel">
+<p>アーチャーターン終了後に確率で発動。発動条件：</p>
+<ul>
+  <li>シナジー15以上</li>
+  <li>絆8以上</li>
+  <li>確率 = 絆 x 1.5%（最大50%）</li>
+</ul>
+<p class="note">絆が高いほど合同攻撃が発動しやすくなります。</p>
+</div>
+
+<h3>救出システム</h3>
+<div class="panel">
+<p><span class="gold">絆10以上</span>の時、片方のHPが0になると相方が救出しHP20まで回復させます。</p>
+<p class="note">一度きりではなく、絆が十分ならば繰り返し発動します。</p>
+</div>
+
+<h2>難易度別の違い</h2>
+<div class="panel">
+<ul>
+  <li><span class="gold">EASY</span> -- 敵HP x0.7 / 敵攻撃 x0.7 / 絆獲得 x1.3</li>
+  <li><span class="gold">NORMAL</span> -- 基本値</li>
+  <li><span class="warn">HARD</span> -- 敵HP x1.4 / 敵攻撃 x1.25 / 絆獲得 x0.8</li>
+</ul>
+<p class="note">HARDでは絆の蓄積が遅く、隠しエンディング達成が困難です。</p>
+</div>
+
+<h2>エンディング一覧（全7種）</h2>
+
+<div class="end-box">
+  <div class="end-title" style="color:#888">敗北エンド -- データ消失</div>
+  <p>条件：HPが0になったサーヴァント発生（救出不可時）</p>
+</div>
+
+<div class="end-box">
+  <div class="end-title" style="color:#888">孤独エンド -- 各自の道</div>
+  <p>条件：絆 < 7</p>
+</div>
+
+<div class="end-box">
+  <div class="end-title" style="color:#f1c40f">黙認エンド -- 戦士の礼</div>
+  <p>条件：絆 7〜14</p>
+</div>
+
+<div class="end-box">
+  <div class="end-title" style="color:#5bcefa">共闘エンド -- 蒼い槍と紅い外套</div>
+  <p>条件：絆15以上（ボス未撃破）</p>
+</div>
+
+<div class="end-box">
+  <div class="end-title" style="color:#ffd700">真エンド -- 記録されない戦争</div>
+  <p>条件：ボス撃破（絆 < 20）</p>
+</div>
+
+<div class="end-box">
+  <div class="end-title" style="color:#ff44cc">極限共闘エンド -- 同時NP解放</div>
+  <p>条件：ボス撃破 + 絆20以上</p>
+</div>
+
+<div class="end-box">
+  <div class="end-title" style="color:#ff44ff">真・絆エンド -- 永遠に繋がる魂（隠し）</div>
+  <p>条件：<span class="spoiler">ボス撃破 + 絆25以上 + シナジー40以上</span></p>
+  <p class="note">※ 条件部分をタッチ/ホバーすると表示されます</p>
+</div>
+
+<h2>エンディング回収のコツ</h2>
+<div class="panel">
+<ul>
+  <li><span class="gold">絆を上げるには</span> -- 各階到着時の会話イベントで好感度の高い選択肢（通常は1番目）を選んでください。絆+3〜5の選択肢があります。</li>
+  <li><span class="gold">シナジーを上げるには</span> -- 補給品の中の「シナジー結晶」を優先的に取得してください。</li>
+  <li><span class="gold">イベント部屋</span>でも絆が上がります。特に<span class="gold">絆5以上</span>で確率出現する<span class="warn">エミヤの料理イベント</span>は絆+3 & HP回復。</li>
+  <li><span class="gold">隠しエンディング</span>は絆25 + シナジー40が必要なのでEASY難易度推奨。全会話で最大好感度選択 + シナジー結晶収集が必須です。</li>
+  <li><span class="warn">ボスの強さ</span>は絆に応じて変化します：絆 < 8で弱いボス、8〜19で中間、20以上で最強ボス。隠しエンディングを狙う場合は十分な戦闘準備が必要です。</li>
+</ul>
+</div>
+
+<h2>ボス情報</h2>
+<div class="panel">
+<ul>
+  <li><span class="gold">絆 < 8</span> -- 魔神柱フォルネウス（HP 180 / ATK 22）</li>
+  <li><span class="gold">絆 8〜19</span> -- 影のヘラクレス（HP 250 / ATK 26）</li>
+  <li><span class="warn">絆 20+</span> -- 聖杯の汚染体アンリマユ（HP 320 / ATK 30）</li>
+</ul>
+<p class="note">難易度倍率が追加適用されます。HARD + 絆20以上のボスはHP 448。</p>
+</div>
+
+<h2>周回ボーナス（Meta Bonus）</h2>
+<div class="panel">
+<p>特定エンディングクリア時、次回プレイへのボーナスが表示されます：</p>
+<ul>
+  <li><span style="color:#ff44ff">真・絆エンド</span> -- シナジー+10、絆+5</li>
+  <li><span style="color:#ff44cc">極限共闘エンド</span> -- シナジー+5</li>
+  <li><span style="color:#ffd700">真エンド</span> -- 絆+3</li>
+</ul>
+<p class="note">クリア時にセーブデータは削除されます（敗北エンドはセーブ維持）。</p>
+</div>
+
+<div class="disc">
+  ※ファンゲームです。Fateシリーズの全権利はTYPE-MOONに帰属します。<br>
+  Guide by Behelit
+</div>
+
+</body>
+</html>

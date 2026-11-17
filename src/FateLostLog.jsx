@@ -298,7 +298,7 @@ function getVoiceLine(situation, who, lang, bond) {
 function GlitchText({ text, intensity = 1, fontSize = 48, color = "#fff" }) {
   const id = useRef(`g${Math.random().toString(36).slice(2, 7)}`).current;
   return (<div style={{ position: "relative", display: "inline-block" }}>
-    <style>{`.${id}{position:relative;font-size:${fontSize}px;font-weight:900;font-family:'Georgia','Times New Roman',serif;color:${color};letter-spacing:3px}.${id}::before,.${id}::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}.${id}::before{color:${GOLD};animation:${id}b ${2/intensity}s infinite linear alternate-reverse;clip-path:polygon(0 0,100% 0,100% 35%,0 35%)}.${id}::after{color:${CRIM};animation:${id}a ${3/intensity}s infinite linear alternate-reverse;clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%)}@keyframes ${id}b{0%,100%{transform:translate(0)}50%{transform:translate(${-2*intensity}px,${intensity*0.5}px)}}@keyframes ${id}a{0%,100%{transform:translate(0)}50%{transform:translate(${intensity}px,${-intensity}px)}}`}</style>
+    <style>{`.${id}{position:relative;font-size:${typeof fontSize === "number" ? fontSize + "px" : fontSize};white-space:nowrap;font-weight:900;font-family:'Georgia','Times New Roman',serif;color:${color};letter-spacing:3px}.${id}::before,.${id}::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}.${id}::before{color:${GOLD};animation:${id}b ${2/intensity}s infinite linear alternate-reverse;clip-path:polygon(0 0,100% 0,100% 35%,0 35%)}.${id}::after{color:${CRIM};animation:${id}a ${3/intensity}s infinite linear alternate-reverse;clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%)}@keyframes ${id}b{0%,100%{transform:translate(0)}50%{transform:translate(${-2*intensity}px,${intensity*0.5}px)}}@keyframes ${id}a{0%,100%{transform:translate(0)}50%{transform:translate(${intensity}px,${-intensity}px)}}`}</style>
     <div className={id} data-text={text}>{text}</div></div>);
 }
 function Scanlines({ opacity = 0.04 }) { return <div style={{ position: "fixed", inset: 0, background: `repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,${opacity}) 2px,rgba(0,0,0,${opacity}) 4px)`, pointerEvents: "none", zIndex: 9999 }} />; }
@@ -309,20 +309,29 @@ function Decode({ text, duration = 2000 }) { const [d, setD] = useState(""); use
 class SFX { constructor(){this.ctx=null;this.on=false;this.mg=null;} init(){if(this.ctx)return;this.ctx=new(window.AudioContext||window.webkitAudioContext)();this.mg=this.ctx.createGain();this.mg.gain.value=0.2;this.mg.connect(this.ctx.destination);} toggle(){this.on=!this.on;if(this.on)this.init();return this.on;} _osc(f,t,d,v=0.06){if(!this.on||!this.ctx)return;const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type=t;o.frequency.value=f;g.gain.value=v;g.gain.exponentialRampToValueAtTime(0.001,this.ctx.currentTime+d);o.connect(g);g.connect(this.mg);o.start();o.stop(this.ctx.currentTime+d);} beep(){this._osc(440,"square",0.08);} hit(){this._osc(200,"triangle",0.1,0.08);} clash(){this._osc(120,"sawtooth",0.2,0.12);setTimeout(()=>this._osc(80,"square",0.12,0.08),80);} heal(){this._osc(523,"sine",0.3,0.05);setTimeout(()=>this._osc(659,"sine",0.2,0.04),150);} glitch(){if(!this.on||!this.ctx)return;const b=this.ctx.createBuffer(1,this.ctx.sampleRate*0.06,this.ctx.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;const s=this.ctx.createBufferSource(),g=this.ctx.createGain();s.buffer=b;g.gain.value=0.1;s.connect(g);g.connect(this.mg);s.start();} }
 
 // SVGs — refined character silhouettes
-const LancerSVG = ({ size = 80 }) => (<svg width={size} height={size} viewBox="0 0 100 100">
+const LancerSVGFallback = ({ size = 80 }) => (<svg width={size} height={size} viewBox="0 0 100 100">
   <defs><linearGradient id="lg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4fa8d6" stopOpacity="0.95"/><stop offset="100%" stopColor="#1a3a5c" stopOpacity="0.8"/></linearGradient>
   <filter id="lglow"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
   <ellipse cx="50" cy="26" rx="10" ry="11" fill="url(#lg2)" filter="url(#lglow)"/>
   <path d="M38,36 Q33,52 35,78 L42,78 L45,52 L55,52 L58,78 L65,78 Q67,52 62,36 Z" fill="url(#lg2)"/>
   <line x1="72" y1="8" x2="60" y2="78" stroke="#d4a574" strokeWidth="2.5"/>
   <polygon points="72,8 75,16 69,16" fill="#d4a574"/></svg>);
-const ArcherSVG = ({ size = 80 }) => (<svg width={size} height={size} viewBox="0 0 100 100">
+const ArcherSVGFallback = ({ size = 80 }) => (<svg width={size} height={size} viewBox="0 0 100 100">
   <defs><linearGradient id="ag2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#d35050" stopOpacity="0.95"/><stop offset="100%" stopColor="#7f1d1d" stopOpacity="0.8"/></linearGradient>
   <filter id="aglow"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
   <ellipse cx="50" cy="26" rx="10" ry="11" fill="url(#ag2)" filter="url(#aglow)"/>
   <path d="M38,36 Q33,52 35,78 L42,78 L45,52 L55,52 L58,78 L65,78 Q67,52 62,36 Z" fill="url(#ag2)"/>
   <line x1="28" y1="32" x2="20" y2="60" stroke="#b8c4d0" strokeWidth="2"/>
   <line x1="72" y1="32" x2="80" y2="60" stroke="#b8c4d0" strokeWidth="2"/></svg>);
+
+// SD 도트 스프라이트 (public/img). 이미지가 없거나 로드에 실패하면 fallback을 그린다.
+function Sprite({ src, size, fallback }) {
+  const [err, setErr] = useState(false);
+  if (err) return fallback;
+  return <img src={src} width={size} height={size} alt="" onError={() => setErr(true)} style={{ imageRendering: "pixelated", objectFit: "contain" }} />;
+}
+const LancerSVG = ({ size = 80 }) => <Sprite src="/img/lancer.png" size={size} fallback={<LancerSVGFallback size={size} />} />;
+const ArcherSVG = ({ size = 80 }) => <Sprite src="/img/archer.png" size={size} fallback={<ArcherSVGFallback size={size} />} />;
 
 // ═══════════════════════════════════════
 // Design System — Fate VN Aesthetic
@@ -354,16 +363,16 @@ const ROOM_TYPES = [
 ];
 
 const ENEMIES_BY_TIER = [
-  [{ name:{ja:"シャドウサーヴァント",kr:"그림자 서번트"},hp:50,atk:8,sym:"S",color:"#9b59b6" },{name:{ja:"魔獣",kr:"마수"},hp:40,atk:10,sym:"K",color:"#e67e22"}],
-  [{ name:{ja:"アサシンクラス",kr:"어새신 클래스"},hp:55,atk:14,sym:"A",color:"#2ecc71" },{name:{ja:"呪われた騎士",kr:"저주받은 기사"},hp:70,atk:12,sym:"N",color:"#95a5a6"}],
-  [{ name:{ja:"デーモン",kr:"데몬"},hp:90,atk:16,sym:"D",color:"#c0392b" },{name:{ja:"キメラ",kr:"키메라"},hp:80,atk:18,sym:"K2",color:"#e67e22"}],
-  [{ name:{ja:"魔神柱残骸",kr:"마신주 잔해"},hp:120,atk:20,sym:"柱",color:"#1abc9c" },{name:{ja:"変異サーヴァント",kr:"변이 서번트"},hp:100,atk:22,sym:"Σ",color:"#9b59b6"}],
+  [{ name:{ja:"シャドウサーヴァント",kr:"그림자 서번트"},hp:50,atk:8,sym:"S",color:"#9b59b6",img:"enemy_shadow" },{name:{ja:"魔獣",kr:"마수"},hp:40,atk:10,sym:"K",color:"#e67e22",img:"enemy_beast" }],
+  [{ name:{ja:"アサシンクラス",kr:"어새신 클래스"},hp:55,atk:14,sym:"A",color:"#2ecc71",img:"enemy_assassin" },{name:{ja:"呪われた騎士",kr:"저주받은 기사"},hp:70,atk:12,sym:"N",color:"#95a5a6",img:"enemy_knight" }],
+  [{ name:{ja:"デーモン",kr:"데몬"},hp:90,atk:16,sym:"D",color:"#c0392b",img:"enemy_demon" },{name:{ja:"キメラ",kr:"키메라"},hp:80,atk:18,sym:"K2",color:"#e67e22",img:"enemy_chimera" }],
+  [{ name:{ja:"魔神柱残骸",kr:"마신주 잔해"},hp:120,atk:20,sym:"柱",color:"#1abc9c",img:"enemy_pillar" },{name:{ja:"変異サーヴァント",kr:"변이 서번트"},hp:100,atk:22,sym:"Σ",color:"#9b59b6",img:"enemy_mutant" }],
 ];
 
 const BOSSES = [
-  { name:{ja:"魔神柱 — フォルネウス",kr:"마신주 — 포르네우스"},hp:180,atk:22,sym:"柱",color:"#1abc9c" },
-  { name:{ja:"影のヘラクレス",kr:"그림자 헤라클레스"},hp:250,atk:26,sym:"H",color:"#e74c3c" },
-  { name:{ja:"聖杯の汚染体 — アンリマユ",kr:"성배의 오염체 — 앙그라 마이뉴"},hp:320,atk:30,sym:"Ω",color:"#ff0040" },
+  { name:{ja:"魔神柱 — フォルネウス",kr:"마신주 — 포르네우스"},hp:180,atk:22,sym:"柱",color:"#1abc9c",img:"boss_forneus",boss:true },
+  { name:{ja:"影のヘラクレス",kr:"그림자 헤라클레스"},hp:250,atk:26,sym:"H",color:"#e74c3c",img:"boss_heracles",boss:true },
+  { name:{ja:"聖杯の汚染体 — アンリマユ",kr:"성배의 오염체 — 앙그라 마이뉴"},hp:320,atk:30,sym:"Ω",color:"#ff0040",img:"boss_angra",boss:true },
 ];
 
 const LOOT_TABLE = [
@@ -413,12 +422,13 @@ const ENDINGS_DATA = {
 // Storage
 // ═══════════════════════════════════════
 const SAVE_KEY = "fate_lost_log_save";
+const LANG_KEY = "fate_lost_log_lang";
 const storage = {
   async set(k, v) { try { await window.storage.set(k, v); } catch { try { localStorage.setItem(k, v); } catch {} } },
   async get(k) { try { const r = await window.storage.get(k); return r?.value || null; } catch { try { return localStorage.getItem(k); } catch { return null; } } },
   async del(k) { try { await window.storage.delete(k); } catch { try { localStorage.removeItem(k); } catch {} } },
 };
-async function saveGame(s) { try { await storage.set(SAVE_KEY, JSON.stringify({ floor:s.floor, roomsExplored:s.roomsExplored, bond:s.bond, synergy:s.synergy, kills:s.kills, lancer:s.lancer, archer:s.archer, flags:s.flags, diff:s.difficulty, status:s.status, ts:Date.now() })); return true; } catch { return false; } }
+async function saveGame(s) { try { await storage.set(SAVE_KEY, JSON.stringify({ floor:s.floor, roomsExplored:s.roomsExplored, bond:s.bond, synergy:s.synergy, kills:s.kills, lancer:s.lancer, archer:s.archer, flags:s.flags, diff:s.difficulty, status:s.status, floorRooms:s.floorRooms, ts:Date.now() })); return true; } catch { return false; } }
 async function loadGame() { try { const r = await storage.get(SAVE_KEY); if (!r) return null; const parsed = JSON.parse(r); if (!parsed.status) parsed.status = { bleedL:0, bleedA:0, inspireL:0, inspireA:0 }; return parsed; } catch { return null; } }
 async function deleteSave() { await storage.del(SAVE_KEY); }
 
@@ -682,7 +692,7 @@ function TitlePhase({ dispatch, sfx, lang, setLang }) {
         <div style={{ marginBottom: 24, display: "flex", gap: 28, justifyContent: "center", alignItems: "flex-end" }}>
           <LancerSVG size={95} /><ArcherSVG size={90} />
         </div>
-        <GlitchText text="FATE // LOST_LOG" intensity={0.3} fontSize={36} color={GOLD} />
+        <GlitchText text="FATE // LOST_LOG" intensity={0.3} fontSize="min(36px, 7.6vw)" color={GOLD} />
         <div style={{ fontSize: 15, color: TEXT_SECONDARY, marginTop: 14, letterSpacing: 4, fontStyle: "italic" }}>
           <Corrupt text={t("subtitle")} level={0.06} />
         </div>
@@ -709,8 +719,8 @@ function TitlePhase({ dispatch, sfx, lang, setLang }) {
           <button onClick={() => { sfx.current?.beep(); dispatch({ type: "SET", value: { difficulty: diff } }); dispatch({ type: "PHASE", value: "terminal" }); }} style={S.btnPrimary(GOLD)}>
             {t("newGame")}
           </button>
-          {!ld && si && <button onClick={async () => { sfx.current?.beep(); dispatch({ type: "SET", value: { floor: si.floor, roomsExplored: si.roomsExplored, bond: si.bond, synergy: si.synergy, kills: si.kills, lancer: si.lancer, archer: si.archer, flags: si.flags || {}, floorRooms: 0, difficulty: si.diff || "normal", status: si.status || { bleedL:0,bleedA:0,inspireL:0,inspireA:0 } } }); dispatch({ type: "LOG", msg: t("loadOk"), color: "#4ade80" }); dispatch({ type: "PHASE", value: "explore" }); }} style={S.btnPrimary("#4ade80")}>
-            {t("cont")} (B{si.floor}F)
+          {!ld && si && <button onClick={async () => { sfx.current?.beep(); dispatch({ type: "SET", value: { floor: si.floor, roomsExplored: si.roomsExplored, bond: si.bond, synergy: si.synergy, kills: si.kills, lancer: si.lancer, archer: si.archer, flags: si.flags || {}, floorRooms: si.floorRooms || 0, difficulty: si.diff || "normal", status: si.status || { bleedL:0,bleedA:0,inspireL:0,inspireA:0 } } }); dispatch({ type: "LOG", msg: t("loadOk"), color: "#4ade80" }); dispatch({ type: "PHASE", value: "explore" }); }} style={S.btnPrimary("#4ade80")}>
+            {t("cont")} (B{si.floor}F{si.ts ? ` · ${new Date(si.ts).toLocaleDateString()}` : ""})
           </button>}
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
@@ -812,6 +822,9 @@ function ExplorePhase({ state, dispatch, sfx }) {
     if (st.bleedA > 0) { dispatch({ type: "UPDATE_ARCHER", value: { hp: Math.max(1, state.archer.hp - 3) } }); dispatch({ type: "STATUS", value: { bleedA: st.bleedA - 1 } }); dispatch({ type: "LOG", msg: `🩸 ${t("emName")} ${L === "ja" ? "出血ダメージ 3" : "출혈 데미지 3"}`, color: "#ff4444" }); }
   }, [state.floorRooms]);
 
+  // 자동 저장: 방을 하나 지나거나 층이 바뀔 때마다 (탭을 닫아도 이어할 수 있게)
+  useEffect(() => { if (state.lancer.hp > 0 && state.archer.hp > 0 && state.roomsExplored > 0) saveGame(state); }, [state.floor, state.floorRooms, state.roomsExplored]);
+
   const doSave = async () => { setSaving(true); const ok = await saveGame(state); dispatch({ type: "LOG", msg: ok ? t("saveOk") : t("saveFail"), color: ok ? "#4ade80" : CRIM }); setSaving(false); };
   const rollRoom = () => { const tw = ROOM_TYPES.reduce((s, r) => s + r.weight, 0); let roll = Math.random() * tw, acc = 0; for (const r of ROOM_TYPES) { acc += r.weight; if (roll < acc) return r; } return ROOM_TYPES[0]; };
 
@@ -849,7 +862,7 @@ function ExplorePhase({ state, dispatch, sfx }) {
     if (rt.id === "enemy") {
       const tier = Math.min(Math.floor((state.floor - 1) / 3), ENEMIES_BY_TIER.length - 1);
       const base = pick(ENEMIES_BY_TIER[tier]); const m = 1 + (state.floor - 1) * 0.12;
-      const en = { name: base.name[L] || base.name.ja, hp: Math.floor(base.hp * m * df.enemyHp), maxHp: Math.floor(base.hp * m * df.enemyHp), atk: Math.floor(base.atk * m * df.enemyAtk), sym: base.sym, color: base.color };
+      const en = { name: base.name[L] || base.name.ja, hp: Math.floor(base.hp * m * df.enemyHp), maxHp: Math.floor(base.hp * m * df.enemyHp), atk: Math.floor(base.atk * m * df.enemyAtk), sym: base.sym, color: base.color, img: base.img };
       dispatch({ type: "SET", value: { battle: { enemy: en, turn: 0 } } }); dispatch({ type: "PHASE", value: "battle" });
     } else if (rt.id === "loot") {
       const shuffled = [...LOOT_TABLE].sort(() => Math.random() - 0.5);
@@ -1066,7 +1079,7 @@ function BattlePhase({ state, dispatch, sfx }) {
         if (pb) msgs.push({ msg: pb, color: who === "cu" ? CU_COLOR : EM_COLOR });
       }
       msgs.forEach(m => addLog(m.msg, m.color));
-      const isBoss = ["柱", "H", "Ω"].includes(e.sym);
+      const isBoss = !!e.boss; // 기호 비교 대신 플래그 (일반 적 魔神柱残骸도 기호가 "柱"라 엔딩으로 넘어가던 버그)
       timerRef.current = setTimeout(() => dispatch({ type: "PHASE", value: isBoss ? "ending" : "explore" }), 1200);
       setActing(false); return;
     }
@@ -1128,7 +1141,7 @@ function BattlePhase({ state, dispatch, sfx }) {
         </div>
       </div>
       <div style={{ color: GOLD, fontSize: 18, fontWeight: "bold", letterSpacing: 4 }}>VS</div>
-      {e && <div style={{ textAlign: "center" }}><div style={{ fontSize: 44, color: e.color, textShadow: `0 0 16px ${e.color}40` }}>{e.sym}</div><div style={{ color: e.color, fontSize: 15, fontWeight: "bold", letterSpacing: 1 }}>{e.name}</div><div style={{ ...S.hpBg, marginTop: 6 }}><div style={S.hpBar(eHp, CRIM)} /></div><div style={{ color: TEXT_SECONDARY, fontSize: 11, marginTop: 2 }}>HP {Math.max(0, e.hp)}/{e.maxHp}</div></div>}
+      {e && <div style={{ textAlign: "center" }}><Sprite src={`/img/${e.img}.png`} size={e.boss ? 128 : 96} fallback={<div style={{ fontSize: 44, color: e.color, textShadow: `0 0 16px ${e.color}40` }}>{e.sym}</div>} /><div style={{ color: e.color, fontSize: 15, fontWeight: "bold", letterSpacing: 1 }}>{e.name}</div><div style={{ ...S.hpBg, marginTop: 6 }}><div style={S.hpBar(eHp, CRIM)} /></div><div style={{ color: TEXT_SECONDARY, fontSize: 11, marginTop: 2 }}>HP {Math.max(0, e.hp)}/{e.maxHp}</div></div>}
     </div>
 
     {/* Tooltip */}
@@ -1162,7 +1175,7 @@ function EndingPhase({ state, dispatch }) {
 
   const getEnd = () => {
     if (state.lancer.hp <= 0 || state.archer.hp <= 0) return "defeat";
-    const isBoss = state.battle?.enemy?.hp <= 0 && ["柱", "H", "Ω"].includes(state.battle.enemy.sym);
+    const isBoss = state.battle?.enemy?.hp <= 0 && !!state.battle.enemy.boss;
     if (isBoss && state.bond >= 25 && state.synergy >= 40) return "true_bond";
     if (isBoss && state.bond >= 20) return "boss_extreme";
     if (isBoss) return "boss_clear";
@@ -1220,7 +1233,10 @@ export default function FateLostLog() {
   const [state, dispatch] = useReducer(reducer, INIT());
   const [sndOn, setSndOn] = useState(false);
   const sfx = useRef(new SFX());
-  const [lang, setLang] = useState("ja");
+  const [lang, setLangState] = useState("ja");
+  // 언어 선택 기억
+  useEffect(() => { (async () => { const l = await storage.get(LANG_KEY); if (l === "ja" || l === "kr") setLangState(l); })(); }, []);
+  const setLang = (l) => { setLangState(l); storage.set(LANG_KEY, l); };
 
   return (
     <LangCtx.Provider value={lang}><div>
